@@ -19,6 +19,8 @@ export default function AdminMenuPage() {
 function MenuManager() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [todayRevenue, setTodayRevenue] = useState(0);
+  const [todayOrdersCount, setTodayOrdersCount] = useState(0);
   const [error, setError] = useState("");
 
   const [form, setForm] = useState({ category: "", name: "", price: "" });
@@ -43,8 +45,32 @@ function MenuManager() {
     setLoading(false);
   }
 
+  async function loadTodayRevenue() {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    const { data, error } = await supabase
+      .from("orders")
+      .select("total")
+      .gte("created_at", start.toISOString())
+      .lt("created_at", end.toISOString());
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    const orders = data || [];
+    const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    setTodayRevenue(revenue);
+    setTodayOrdersCount(orders.length);
+  }
+
   useEffect(() => {
     loadItems();
+    loadTodayRevenue();
   }, []);
 
   const categories = useMemo(
@@ -146,6 +172,42 @@ function MenuManager() {
       </div>
 
       {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
+
+      <div className="admin-section">
+        <h2 className="section-title">Выручка сегодня</h2>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 14,
+              padding: "12px 16px",
+              minWidth: 160,
+              flex: 1,
+            }}
+          >
+            <div style={{ color: "var(--ink-soft)", fontSize: 12 }}>Сумма</div>
+            <div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>
+              {todayRevenue.toLocaleString("ru-RU")} с
+            </div>
+          </div>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 14,
+              padding: "12px 16px",
+              minWidth: 160,
+              flex: 1,
+            }}
+          >
+            <div style={{ color: "var(--ink-soft)", fontSize: 12 }}>Заказов</div>
+            <div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>
+              {todayOrdersCount}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="admin-section">
         <h2 className="section-title">Добавить позицию</h2>
