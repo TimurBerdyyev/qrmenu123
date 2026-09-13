@@ -1,10 +1,17 @@
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-display",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin", "cyrillic"],
+  weight: ["600", "700"],
+  variable: "--font-heading",
   display: "swap",
 });
 
@@ -22,7 +29,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ru" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="ru" className={`${fraunces.variable} ${playfair.variable} ${inter.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -35,7 +35,7 @@ export default function PasscodeGate({ onUnlock, dark = false }) {
         <h1
           style={{
             marginBottom: 16,
-            fontFamily: "var(--font-display), serif",
+            fontFamily: "var(--font-heading), serif",
             color: fieldColor,
           }}
         >

@@ -33,7 +33,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-heading), Georgia, serif;
   font-weight: 600;
   letter-spacing: -0.01em;
   margin: 0;
@@ -355,7 +355,7 @@ input[type="text"] {
 
 .order-card .table-tag {
   font-size: 19px;
-  font-family: var(--font-display), serif;
+  font-family: var(--font-heading), serif;
   font-weight: 600;
 }
 
@@ -523,7 +523,7 @@ input[type="text"] {
 
 .qr-card .label {
   margin-top: 8px;
-  font-family: var(--font-display), serif;
+  font-family: var(--font-heading), serif;
   font-size: 18px;
 }
 
